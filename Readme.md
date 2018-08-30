@@ -1,7 +1,7 @@
 # Личный проект «Кэндишоп» [![Build status][travis-image]][travis-url]
 
 * Студент: [Musssss Musalaeva](https://up.htmlacademy.ru/javascript/15/user/140977).
-* Наставник: `Неизвестно`.
+* Наставник: `Дмитрий Мирошниченко`.
 
 ---
 
