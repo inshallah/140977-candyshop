@@ -184,7 +184,7 @@ var renderGoods = function (good) {
     evt.preventDefault();
     favoriteSelected.classList.toggle('card__btn-favorite--selected');
   });
-  var pressBtnToBasket = document.querySelector('.card__btn');
+  var pressBtnToBasket = cardElement.querySelector('.card__btn');
   pressBtnToBasket.addEventListener('click', function (evt) {
     evt.preventDefault();
     addToBasket();
@@ -300,15 +300,14 @@ var renderHeaderBusket = function () {
 //   deliverCourierOptions.classList.add('visually-hidden');
 //   deliverStoreOptions.classList.remove('visually-hidden');
 // });
-var deliverArea = document.querrySelector('.deliver container');
+var deliverTab = document.querrySelectorAll('.toggle-btn__input');
 var deliverStoreOptions = document.querySelector('.deliver__store');
 var deliverCourierOptions = document.querySelector('.deliver__courier');
-deliverArea.addEventListener('click', function (evt) {
-  var target = evt.id;
-  if (target = '#deliver__store') {
+deliverTab.addEventListener('click', function (evt) {
+  if (evt.target.id === '#deliver__store') {
     deliverCourierOptions.classList.add('visually-hidden');
     deliverStoreOptions.classList.remove('visually-hidden');
-  } else if (target = '#deliver__courier') {
+  } else if (evt.target.id === '#deliver__courier') {
     deliverStoreOptions.classList.add('visually-hidden');
     deliverCourierOptions.classList.remove('visually-hidden');
   }
