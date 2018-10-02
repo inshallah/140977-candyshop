@@ -163,11 +163,32 @@ var renderGoods = function (good) {
     case 5:
       cardRating = 'stars__rating--five';
   }
+
+  // var ValueToClass = {
+  //   '1': 'stars__rating--one',
+  //   '2': 'stars__rating--two',
+  //   '3': 'stars__rating--three',
+  //   '4': 'stars__rating--four',
+  //   '5': 'stars__rating--four'
+  // };
+  // var cardRating = cardElement.querySelector('.stars__rating');
+  // ValueToClass[good.rating.value];
+  // cardRating.classList.add([good.rating.value]);
   cardElement.querySelector('.stars__rating').classList.add(cardRating);
   cardElement.querySelector('.star__count').textContent = good.rating.number;
   cardElement.querySelector('.card__characteristic').textContent = sugar + ' ' + good.nutritionFacts.energy;
   cardElement.querySelector('.card__composition-list').textContent = good.nutritionFacts.contents;
 
+  var favoriteSelected = cardElement.querySelector('.card__btn-favorite');
+  favoriteSelected.addEventListener('click', function (evt) {
+    evt.preventDefault();
+    favoriteSelected.classList.toggle('card__btn-favorite--selected');
+  });
+  var pressBtnToBasket = cardElement.querySelector('.card__btn');
+  pressBtnToBasket.addEventListener('click', function (evt) {
+    evt.preventDefault();
+    addToBasket();
+  });
   return cardElement;
 };
 
@@ -182,13 +203,13 @@ var getGoodsInBasket = function () {
   };
 };
 
+
 // Функция, возвращающая DOM-элемент для объекта, добавленного в корзину
 var renderGoodsInBasket = function (goodsItemInBasket) {
   var cardElement = cardInBasketTemplate.cloneNode(true).content;
   cardElement.querySelector('.card-order__title').textContent = goodsItemInBasket['name'];
   cardElement.querySelector('.card-order__img').src = goodsItemInBasket['picture'];
   cardElement.querySelector('.card-order__price').textContent = goodsItemInBasket.price;
-
   return cardElement;
 };
 
@@ -199,7 +220,6 @@ var generateCards = function () {
     goods.push(getGoods());
   }
 };
-generateCards();
 
 
 // Функция добавления в разметку массива сгенерированных обектов
@@ -211,7 +231,6 @@ var renderCards = function () {
   similarCardsElement.appendChild(fragment);
   similarCardsElement.classList.remove('visually-hidden');
 };
-renderCards();
 
 
 // Функция генерации и добавления в массив случайных объектов в корзине
@@ -220,7 +239,6 @@ var generateCardsInBasket = function () {
     goodsInBasket.push(getGoodsInBasket());
   }
 };
-generateCardsInBasket();
 
 
 // Функция добавления в разметку массива сгенерированных обектов в корзине
@@ -234,9 +252,85 @@ var renderCardsInBasket = function () {
   cardInBasketList.appendChild(fragment);
   cardInBasketList.classList.remove('goods__cards--empty');
   document.querySelector('.goods__card-empty').classList.add('visually-hidden');
+  renderHeaderBusket();
 };
+
+
+generateCards();
+renderCards();
+generateCardsInBasket();
 renderCardsInBasket();
 
 
 similarCardsElement.classList.remove('.catalog__cards--load');
 similarCardsElement.querySelector('.catalog__load').classList.add('visually-hidden');
+
+
+var addToBasket = function (product) {
+  var goodInBasket = Object.assign({}, product);
+  goodInBasket.orderedAmount = 1;
+  if (goodInBasket.amount <= goodInBasket.orderedamount) {
+    return;
+  }
+  delete goodInBasket.amount;
+  if (goodsInBasket.find(goodInBasket.name) === product.name) {
+    goodInBasket.orderedamount++;
+  } else {
+    goodsInBasket.push(goodInBasket);
+  }
+};
+
+var initialValue = 0;
+var calculateSum = function (accumulator, currentValue) {
+  return accumulator + currentValue.price;
+};
+
+
+var renderHeaderBusket = function () {
+  var generalSum = goodsInBasket.reduce(calculateSum(), initialValue);
+  document.querrySelector('.main-header__basket').textContent = 'В корзине ' + goodsInBasket.length + 'товара на ' + generalSum + '₽';
+};
+
+
+// var deliverStoreBtn = document.querySelector('#deliver__store');
+// var deliverCourierBtn = document.querySelector('#deliver__courier');
+// var deliverStoreOptions = document.querySelector('.deliver__store');
+// var deliverCourierOptions = document.querySelector('.deliver__courier');
+// deliverStoreBtn.addEventListener('click', function () {
+//   deliverCourierOptions.classList.add('visually-hidden');
+//   deliverStoreOptions.classList.remove('visually-hidden');
+// });
+var deliverTab = document.querrySelectorAll('.toggle-btn__input');
+var deliverStoreOptions = document.querySelector('.deliver__store');
+var deliverCourierOptions = document.querySelector('.deliver__courier');
+deliverTab.addEventListener('click', function (evt) {
+  if (evt.target.id === '#deliver__store') {
+    deliverCourierOptions.classList.add('visually-hidden');
+    deliverStoreOptions.classList.remove('visually-hidden');
+  } else if (evt.target.id === '#deliver__courier') {
+    deliverStoreOptions.classList.add('visually-hidden');
+    deliverCourierOptions.classList.remove('visually-hidden');
+  }
+});
+
+
+var validateCardArea = function (cardNumber) {
+  var cardNumberArr = [];
+  var cardNumberList = cardNumber.split('');
+  for (var i = 1; i <= cardNumberList.length; i++) {
+    if (i % 2 !== 0) {
+      var cardOddNum = parseInt(cardNumber[i]) * 2;
+      if (cardOddNum > 9) {
+        cardNumberArr.push(cardOddNum - 9);
+      } else {
+        cardNumberArr.push(cardOddNum);
+      }
+    } else {
+      var cardEvenNum = parseInt(cardNumber[i]);
+      cardNumberArr.push(cardEvenNum);
+    }
+  }
+  return cardNumberArr;
+  // var commonSum = cardNumberArr.reduce(function (a, b) { return a + b; });
+};
+
