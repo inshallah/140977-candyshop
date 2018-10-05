@@ -121,6 +121,7 @@ var getContents = function () {
 // функция возврата случайного объекта с описанием товара
 var getGoods = function () {
   return {
+    name: GOODS_NAMES[getRandomInt(0, GOODS_NAMES.length - 1)],
     picture: GOODS_PICTURES[getRandomInt(0, GOODS_PICTURES.length - 1)],
     amount: getRandomInt(0, 21),
     price: getRandomInt(100, 1501),
@@ -245,10 +246,6 @@ var generateCardsInBasket = function () {
   }
 };
 
-// var calculateSum = function (accumulator, currentValue) {
-//   return accumulator + currentValue.price;
-// };
-
 
 // Функция добавления в разметку массива сгенерированных обектов в корзине
 var renderCardsInBasket = function () {
@@ -268,13 +265,12 @@ var addToBasket = function (product) {
   var goodInBasket = Object.assign({}, product);
   var currentGoodinBasket = goodsInBasket.find(function (item) {
     return item.name === product.name;
-    // return item.name === goodInBasket.name;
+
   });
   goodInBasket.orderedAmount = 0;
   if (goodInBasket.amount <= goodInBasket.orderedAmount) {
     return;
   }
-  // delete goodInBasket.amount;
   if (currentGoodinBasket) {
     currentGoodinBasket.orderedAmount++;
   } else {
@@ -285,7 +281,7 @@ var addToBasket = function (product) {
 
 var renderHeaderBasket = function () {
   var generalSum = goodsInBasket.reduce(calculateSum, initialValue);
-  document.querySelector('.main-header__basket').textContent = 'В корзине ' + goodsInBasket.length + 'товара на ' + generalSum + ' ₽';
+  document.querySelector('.main-header__basket').textContent = 'В корзине ' + goodsInBasket.length + ' товара на ' + generalSum + ' ₽';
 };
 
 var calculateSum = function (accumulator, currentValue) {
@@ -297,13 +293,6 @@ parentTabElement.addEventListener('change', function (evt) {
     return;
   }
 
-  // if (evt.target.id === '#deliver__store') {
-  //   deliverCourierOptionsElement.classList.add('visually-hidden');
-  //   deliverStoreOptionsElement.classList.remove('visually-hidden');
-  // } else if (evt.target.id === '#deliver__courier') {
-  //   deliverStoreOptionsElement.classList.add('visually-hidden');
-  //   deliverCourierOptionsElement.classList.remove('visually-hidden');
-  // }
   var currentElement = document.querySelector('.' + evt.target.id);
   var preventElementId = evt.target.parentNode.querySelector('input[checked]').id;
   var preventElement = document.querySelector('.' + preventElementId);
@@ -314,16 +303,6 @@ parentTabElement.addEventListener('change', function (evt) {
 
 generateCards();
 renderCards();
-// generateCardsInBasket();
+generateCardsInBasket();
 renderCardsInBasket();
-
-
-// var deliverStoreBtn = document.querySelector('#deliver__store');
-// var deliverCourierBtn = document.querySelector('#deliver__courier');
-// var deliverStoreOptions = document.querySelector('.deliver__store');
-// var deliverCourierOptions = document.querySelector('.deliver__courier');
-// deliverStoreBtn.addEventListener('click', function () {
-//   deliverCourierOptions.classList.add('visually-hidden');
-//   deliverStoreOptions.classList.remove('visually-hidden');
-// });
 
