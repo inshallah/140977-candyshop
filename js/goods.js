@@ -116,6 +116,7 @@ var getContents = function () {
 // функция возврата случайного объекта с описанием товара
 var getGoods = function () {
   return {
+    name: GOODS_NAMES[getRandomInt(0, GOODS_NAMES.length - 1)],
     picture: GOODS_PICTURES[getRandomInt(0, GOODS_PICTURES.length - 1)],
     amount: getRandomInt(0, 21),
     price: getRandomInt(100, 1501),
@@ -331,6 +332,6 @@ var validateCardArea = function (cardNumber) {
     }
   }
   return cardNumberArr;
-  // var commonSum = cardNumberArr.reduce(function (a, b) { return a + b; });
+  var commonSum = cardNumberArr.reduce(function (a, b) { return a + b; });
 };
 
