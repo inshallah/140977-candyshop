@@ -91,7 +91,12 @@ var cardTemplate = document.querySelector('#card');
 var cardStatus = 'card--soon';
 var similarCardsElement = document.querySelector('.catalog__cards');
 var cardInBasketTemplate = document.querySelector('#card-order');
-
+var parentTabElement = document.querySelector('.buy form');
+// var deliverStoreOptionsElement = document.querySelector('.deliver__store');
+// var deliverCourierOptionsElement = document.querySelector('.deliver__courier');
+var initialValue = 0;
+var hideLoadinfo = similarCardsElement.querySelector('.catalog__load');
+hideLoadinfo.classList.add('visually-hidden');
 
 var getRandomInt = function (min, max) {
   return min + Math.floor(Math.random() * (max + 1 - min));
@@ -188,7 +193,11 @@ var renderGoods = function (good) {
   var pressBtnToBasket = cardElement.querySelector('.card__btn');
   pressBtnToBasket.addEventListener('click', function (evt) {
     evt.preventDefault();
+<<<<<<< HEAD
     addToBasket();
+=======
+    addToBasket(good);
+>>>>>>> master
   });
   return cardElement;
 };
@@ -253,6 +262,7 @@ var renderCardsInBasket = function () {
   cardInBasketList.appendChild(fragment);
   cardInBasketList.classList.remove('goods__cards--empty');
   document.querySelector('.goods__card-empty').classList.add('visually-hidden');
+<<<<<<< HEAD
   renderHeaderBusket();
 };
 
@@ -261,8 +271,57 @@ generateCards();
 renderCards();
 generateCardsInBasket();
 renderCardsInBasket();
+=======
+  renderHeaderBasket();
+};
+>>>>>>> master
+
+var addToBasket = function (product) {
+  var goodInBasket = Object.assign({}, product);
+  var currentGoodinBasket = goodsInBasket.find(function (item) {
+    return item.name === product.name;
+
+  });
+  goodInBasket.orderedAmount = 0;
+  if (goodInBasket.amount <= goodInBasket.orderedAmount) {
+    return;
+  }
+  if (currentGoodinBasket) {
+    currentGoodinBasket.orderedAmount++;
+  } else {
+    goodsInBasket.push(goodInBasket);
+  }
+  renderCardsInBasket();
+};
+
+var renderHeaderBasket = function () {
+  var generalSum = goodsInBasket.reduce(calculateSum, initialValue);
+  document.querySelector('.main-header__basket').textContent = 'В корзине ' + goodsInBasket.length + ' товара на ' + generalSum + ' ₽';
+};
+
+var calculateSum = function (accumulator, currentValue) {
+  return accumulator + currentValue.price;
+};
+
+parentTabElement.addEventListener('change', function (evt) {
+  if (!evt.target.classList.contains('toggle-btn__input')) {
+    return;
+  }
+
+  var currentElement = document.querySelector('.' + evt.target.id);
+  var preventElementId = evt.target.parentNode.querySelector('input[checked]').id;
+  var preventElement = document.querySelector('.' + preventElementId);
+  preventElement.classList.add('visually-hidden');
+  currentElement.classList.remove('visually-hidden');
+});
 
 
+generateCards();
+renderCards();
+generateCardsInBasket();
+renderCardsInBasket();
+
+<<<<<<< HEAD
 similarCardsElement.classList.remove('.catalog__cards--load');
 similarCardsElement.querySelector('.catalog__load').classList.add('visually-hidden');
 
@@ -335,3 +394,5 @@ var validateCardArea = function (cardNumber) {
   var commonSum = cardNumberArr.reduce(function (a, b) { return a + b; });
 };
 
+=======
+>>>>>>> master
