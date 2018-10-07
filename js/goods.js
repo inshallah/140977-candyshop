@@ -320,14 +320,14 @@ var validateCardArea = function (cardNumber) {
   var cardNumberList = cardNumber.split('');
   for (var i = 1; i <= cardNumberList.length; i++) {
     if (i % 2 !== 0) {
-      var cardOddNum = parseInt(cardNumber[i]) * 2;
+      var cardOddNum = parseInt(cardNumber[i], 10) * 2;
       if (cardOddNum > 9) {
         cardNumberArr.push(cardOddNum - 9);
       } else {
         cardNumberArr.push(cardOddNum);
       }
     } else {
-      var cardEvenNum = parseInt(cardNumber[i]);
+      var cardEvenNum = parseInt(cardNumber[i], 10);
       cardNumberArr.push(cardEvenNum);
     }
   }
@@ -335,23 +335,49 @@ var validateCardArea = function (cardNumber) {
   // var commonSum = cardNumberArr.reduce(function (a, b) { return a + b; });
 };
 
-var leftPin = document.querySelector('.range__btn--left');
-// var rightPin = document.querySelector('.range__btn--right');
-leftPin.addEventListener('mousedown', function (evt) {
+validateCardArea();
+
+
+// var getPercentage = function (number) {
+//   return Math.round (number * 100 / 245);
+// };
+
+var rangeFilterElem = document.querySelector('.range__filter');
+var rangePinElem = rangeFilterElem.querySelector('.range__btn');
+var leftPinElem = rangeFilterElem.querySelector('.range__btn--left');
+var rightPinElem = rangeFilterElem.querySelector('.range__btn--right');
+
+rangePinElem.addEventListener('mousedown', function (evt) {
   evt.preventDefault();
+
   var startCoords = {
-    x: evt.clientX,
-    y: evt.clientY
+    x: evt.clientX
   };
+
   document.addEventListener('mousemove', onMouseMove);
   document.addEventListener('mouseup', onMouseUp);
+
+
+  var onMouseMove = function (evtMove) {
+    evtMove.preventDefault();
+
+    var shift = {
+      x: startCoords.x - evtMove.clientX
+    };
+
+    // startCoords = {
+    //   x: evtMove.clientX
+    // };
+
+    //   var startCoords {
+    //     min: math.min(),
+    //     max: math.max()
+    // }
+
+    if (rangePinElem.classList.contains('.range__btn--left')) {
+
+
+    };
+
+  };
 });
-
-var onMouseMove = function (evtMove) {
-
-  var shift = {
-    x: startCoords.x - evtMove.clientX
-    y: startCoords.y - evtMove.clientY
-  }
-
-};
