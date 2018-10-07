@@ -91,6 +91,7 @@ var cardTemplate = document.querySelector('#card');
 var cardStatus = 'card--soon';
 var similarCardsElement = document.querySelector('.catalog__cards');
 var cardInBasketTemplate = document.querySelector('#card-order');
+// var sendFormBtn = document.querySelector('.');
 
 
 var getRandomInt = function (min, max) {
@@ -263,8 +264,8 @@ generateCardsInBasket();
 renderCardsInBasket();
 
 
-similarCardsElement.classList.remove('.catalog__cards--load');
-similarCardsElement.querySelector('.catalog__load').classList.add('visually-hidden');
+var catalogLoadElem = similarCardsElement.querySelector('.catalog__load');
+catalogLoadElem.classList.add('visually-hidden');
 
 
 var addToBasket = function (product) {
@@ -289,7 +290,7 @@ var calculateSum = function (accumulator, currentValue) {
 
 var renderHeaderBusket = function () {
   var generalSum = goodsInBasket.reduce(calculateSum(), initialValue);
-  document.querrySelector('.main-header__basket').textContent = 'В корзине ' + goodsInBasket.length + 'товара на ' + generalSum + '₽';
+  document.querrySelector('.main-header__basket').textContent = 'В корзине ' + goodsInBasket.length + ' товара на ' + generalSum + '₽';
 };
 
 
@@ -331,8 +332,15 @@ var validateCardArea = function (cardNumber) {
       cardNumberArr.push(cardEvenNum);
     }
   }
-  return cardNumberArr;
-  // var commonSum = cardNumberArr.reduce(function (a, b) { return a + b; });
+  var commonSum = cardNumberArr.reduce(function (a, b) {
+    return a + b;
+  });
+
+  if (commonSum % 10 === 0) {
+    return true;
+  } else {
+    return false;
+  }
 };
 
 validateCardArea();
@@ -342,42 +350,42 @@ validateCardArea();
 //   return Math.round (number * 100 / 245);
 // };
 
-var rangeFilterElem = document.querySelector('.range__filter');
-var rangePinElem = rangeFilterElem.querySelector('.range__btn');
-var leftPinElem = rangeFilterElem.querySelector('.range__btn--left');
-var rightPinElem = rangeFilterElem.querySelector('.range__btn--right');
+// var rangeFilterElem = document.querySelector('.range__filter');
+// var rangePinElem = rangeFilterElem.querySelector('.range__btn');
+// var leftPinElem = rangeFilterElem.querySelector('.range__btn--left');
+// var rightPinElem = rangeFilterElem.querySelector('.range__btn--right');
 
-rangePinElem.addEventListener('mousedown', function (evt) {
-  evt.preventDefault();
+// rangePinElem.addEventListener('mousedown', function (evt) {
+//   evt.preventDefault();
 
-  var startCoords = {
-    x: evt.clientX
-  };
+//   var startCoords = {
+//     x: evt.clientX
+//   };
 
-  document.addEventListener('mousemove', onMouseMove);
-  document.addEventListener('mouseup', onMouseUp);
-
-
-  var onMouseMove = function (evtMove) {
-    evtMove.preventDefault();
-
-    var shift = {
-      x: startCoords.x - evtMove.clientX
-    };
-
-    // startCoords = {
-    //   x: evtMove.clientX
-    // };
-
-    //   var startCoords {
-    //     min: math.min(),
-    //     max: math.max()
-    // }
-
-    if (rangePinElem.classList.contains('.range__btn--left')) {
+//   document.addEventListener('mousemove', onMouseMove);
+//   document.addEventListener('mouseup', onMouseUp);
 
 
-    };
+//   var onMouseMove = function (evtMove) {
+//     evtMove.preventDefault();
 
-  };
-});
+//     var shift = {
+//       x: startCoords.x - evtMove.clientX
+//     };
+
+//     // startCoords = {
+//     //   x: evtMove.clientX
+//     // };
+
+//     //   var startCoords {
+//     //     min: math.min(),
+//     //     max: math.max()
+//     // }
+
+//     if (rangePinElem.classList.contains('.range__btn--left')) {
+
+
+//     };
+
+//   };
+// });
