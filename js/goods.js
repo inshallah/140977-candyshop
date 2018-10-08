@@ -91,7 +91,7 @@ var cardTemplate = document.querySelector('#card');
 var cardStatus = 'card--soon';
 var similarCardsElement = document.querySelector('.catalog__cards');
 var cardInBasketTemplate = document.querySelector('#card-order');
-// var sendFormBtn = document.querySelector('.');
+var sendFormBtn = document.querySelector('.buy__submit-btn');
 
 
 var getRandomInt = function (min, max) {
@@ -254,7 +254,7 @@ var renderCardsInBasket = function () {
   cardInBasketList.appendChild(fragment);
   cardInBasketList.classList.remove('goods__cards--empty');
   document.querySelector('.goods__card-empty').classList.add('visually-hidden');
-  renderHeaderBusket();
+  // renderHeaderBusket();
 };
 
 
@@ -282,16 +282,16 @@ var addToBasket = function (product) {
   }
 };
 
-var initialValue = 0;
-var calculateSum = function (accumulator, currentValue) {
-  return accumulator + currentValue.price;
-};
+// var initialValue = 0;
+// var calculateSum = function (accumulator, currentValue) {
+//   return accumulator + currentValue.price;
+// };
 
 
-var renderHeaderBusket = function () {
-  var generalSum = goodsInBasket.reduce(calculateSum(), initialValue);
-  document.querrySelector('.main-header__basket').textContent = 'В корзине ' + goodsInBasket.length + ' товара на ' + generalSum + '₽';
-};
+// var renderHeaderBusket = function () {
+//   var generalSum = goodsInBasket.reduce(calculateSum(), initialValue);
+//   document.querySelector('.main-header__basket').textContent = 'В корзине ' + goodsInBasket.length + ' товара на ' + generalSum + '₽';
+// };
 
 
 // var deliverStoreBtn = document.querySelector('#deliver__store');
@@ -302,18 +302,18 @@ var renderHeaderBusket = function () {
 //   deliverCourierOptions.classList.add('visually-hidden');
 //   deliverStoreOptions.classList.remove('visually-hidden');
 // });
-var deliverTab = document.querrySelectorAll('.toggle-btn__input');
-var deliverStoreOptions = document.querySelector('.deliver__store');
-var deliverCourierOptions = document.querySelector('.deliver__courier');
-deliverTab.addEventListener('click', function (evt) {
-  if (evt.target.id === '#deliver__store') {
-    deliverCourierOptions.classList.add('visually-hidden');
-    deliverStoreOptions.classList.remove('visually-hidden');
-  } else if (evt.target.id === '#deliver__courier') {
-    deliverStoreOptions.classList.add('visually-hidden');
-    deliverCourierOptions.classList.remove('visually-hidden');
-  }
-});
+// var deliverTab = document.querySelectorAll('.toggle-btn__input');
+// var deliverStoreOptions = document.querySelector('.deliver__store');
+// var deliverCourierOptions = document.querySelector('.deliver__courier');
+// deliverTab.addEventListener('click', function (evt) {
+//   if (evt.target.id === '#deliver__store') {
+//     deliverCourierOptions.classList.add('visually-hidden');
+//     deliverStoreOptions.classList.remove('visually-hidden');
+//   } else if (evt.target.id === '#deliver__courier') {
+//     deliverStoreOptions.classList.add('visually-hidden');
+//     deliverCourierOptions.classList.remove('visually-hidden');
+//   }
+// });
 
 
 var validateCardArea = function (cardNumber) {
@@ -343,49 +343,63 @@ var validateCardArea = function (cardNumber) {
   }
 };
 
-validateCardArea();
+sendFormBtn.addEventListener('click', function () {
+  if (validateCardArea()) {
+    return sendFormBtn.setCustomValidity('');
+  } else {
+    return sendFormBtn.setCustomValidity('Номер карты введен некорректо. Попробуйте еще раз');
+  }
+});
 
+var rangeFilterElem = document.querySelector('.range__filter');
+var rangeFilterPos = rangeFilterElem.getBoundingClientRect();
+var getPercentage = function (number) {
+  return Math.min(Math.max(0, Math.round(number * 100 / rangeFilterPos.width)), 100);
+};
 
-// var getPercentage = function (number) {
-//   return Math.round (number * 100 / 245);
-// };
+var leftPinElem = rangeFilterElem.querySelector('.range__btn--left');
+var rightPinElem = rangeFilterElem.querySelector('.range__btn--right');
+var leftPinPrice = document.querySelector('.range__price--min');
+var rightPinPrice = document.querySelector('.range__price--max');
+var colorPinStr = rangeFilterElem.querySelector('.range__fill-line');
+var pinValues = {
+  min: getPercentage(leftPinElem.getBoundingClientRect().x - rangeFilterPos.x),
+  max: getPercentage(rightPinElem.getBoundingClientRect().x - rangeFilterPos.x)
+};
 
-// var rangeFilterElem = document.querySelector('.range__filter');
-// var rangePinElem = rangeFilterElem.querySelector('.range__btn');
-// var leftPinElem = rangeFilterElem.querySelector('.range__btn--left');
-// var rightPinElem = rangeFilterElem.querySelector('.range__btn--right');
+var getPriceValue = function () {
+  rightPinPrice.textContent = Math.round(pinValues.max * rangeFilterPos.width / 100);
+  leftPinPrice.textContent = Math.round(pinValues.min * rangeFilterPos.width / 100);
+};
 
-// rangePinElem.addEventListener('mousedown', function (evt) {
-//   evt.preventDefault();
+var onMouseDown = function (evt) {
+  evt.preventDefault();
+  evt.stopPropagation();
 
-//   var startCoords = {
-//     x: evt.clientX
-//   };
+  var onMouseMove = function (evtMove) {
+    evtMove.preventDefault();
 
-//   document.addEventListener('mousemove', onMouseMove);
-//   document.addEventListener('mouseup', onMouseUp);
+    if (evt.target.classList.contains('range__btn--left')) {
+      var leftPercentPos = Math.min(getPercentage(evtMove.clientX - rangeFilterPos.x), pinValues.max);
+      pinValues.min = leftPercentPos;
+      leftPinElem.style.left = leftPercentPos + '%';
+      colorPinStr.style.left = leftPercentPos + '%';
+      getPriceValue();
+    } else if (evt.target.classList.contains('range__btn--right')) {
+      var rightPercentPos = Math.max(getPercentage(evtMove.clientX - rangeFilterPos.x), pinValues.min);
+      pinValues.max = rightPercentPos;
+      rightPinElem.style.left = rightPercentPos + '%';
+      colorPinStr.style.right = 100 - rightPercentPos + '%';
+      getPriceValue();
+    }
+  };
+  var onMouseUp = function () {
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+  };
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
+};
 
-
-//   var onMouseMove = function (evtMove) {
-//     evtMove.preventDefault();
-
-//     var shift = {
-//       x: startCoords.x - evtMove.clientX
-//     };
-
-//     // startCoords = {
-//     //   x: evtMove.clientX
-//     // };
-
-//     //   var startCoords {
-//     //     min: math.min(),
-//     //     max: math.max()
-//     // }
-
-//     if (rangePinElem.classList.contains('.range__btn--left')) {
-
-
-//     };
-
-//   };
-// });
+leftPinElem.addEventListener('mousedown', onMouseDown);
+rightPinElem.addEventListener('mousedown', onMouseDown);
