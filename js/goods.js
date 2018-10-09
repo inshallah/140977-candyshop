@@ -92,9 +92,8 @@ var cardStatus = 'card--soon';
 var similarCardsElement = document.querySelector('.catalog__cards');
 var cardInBasketTemplate = document.querySelector('#card-order');
 var parentTabElement = document.querySelector('.buy form');
-// var deliverStoreOptionsElement = document.querySelector('.deliver__store');
-// var deliverCourierOptionsElement = document.querySelector('.deliver__courier');
 var initialValue = 0;
+var sendFormBtn = document.querySelector('.buy__submit-btn');
 var hideLoadinfo = similarCardsElement.querySelector('.catalog__load');
 hideLoadinfo.classList.add('visually-hidden');
 
@@ -365,7 +364,9 @@ deliverTab.addEventListener('click', function (evt) {
 });
 
 
+var cardNumberArea = document.querySelector('#payment__card-number').classList.contains;
 var validateCardArea = function (cardNumber) {
+  cardNumber = cardNumberArea.textContent;
   var cardNumberArr = [];
   var cardNumberList = cardNumber.split('');
   for (var i = 1; i <= cardNumberList.length; i++) {
@@ -384,7 +385,20 @@ var validateCardArea = function (cardNumber) {
   var commonSum = cardNumberArr.reduce(function (a, b) {
     return a + b;
   });
-  return commonSum % 10 === 0;
 
+  if (commonSum % 10 === 0) {
+    return true;
+  } else {
+    return false;
+  }
 };
+
+sendFormBtn.addEventListener('click', function () {
+  if (validateCardArea()) {
+    return sendFormBtn.setCustomValidity('');
+  } else {
+    return sendFormBtn.setCustomValidity('Номер карты введен некорректно. Попробуйте еще раз');
+  }
+});
+
 
