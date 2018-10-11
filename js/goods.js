@@ -364,7 +364,7 @@ deliverTab.addEventListener('click', function (evt) {
 });
 
 
-var cardNumberArea = document.querySelector('#payment__card-number').classList.contains;
+var cardNumberArea = document.querySelector('#payment__card-number');
 var validateCardArea = function (cardNumber) {
   cardNumber = cardNumberArea.textContent;
   var cardNumberArr = [];
@@ -386,18 +386,18 @@ var validateCardArea = function (cardNumber) {
     return a + b;
   });
 
-  if (commonSum % 10 === 0) {
-    return true;
-  } else {
-    return false;
-  }
+  return commonSum % 10 === 0;
+  //   return true;
+  // } else {
+  //   return false;
+  // }
 };
 
 sendFormBtn.addEventListener('click', function () {
   if (validateCardArea()) {
-    return sendFormBtn.setCustomValidity('');
+    return cardNumberArea.setCustomValidity('');
   } else {
-    return sendFormBtn.setCustomValidity('Номер карты введен некорректно. Попробуйте еще раз');
+    return cardNumberArea.setCustomValidity('Номер карты введен некорректно. Попробуйте еще раз');
   }
 });
 
