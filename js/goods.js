@@ -92,7 +92,7 @@ var cardStatus = 'card--soon';
 var similarCardsElement = document.querySelector('.catalog__cards');
 var cardInBasketTemplate = document.querySelector('#card-order');
 var sendFormBtn = document.querySelector('.buy__submit-btn');
-
+var parentTabElement = document.querySelector('.buy form');
 
 var getRandomInt = function (min, max) {
   return min + Math.floor(Math.random() * (max + 1 - min));
@@ -295,7 +295,6 @@ var addToBasket = function (product) {
 
 
 // var deliverStoreBtn = document.querySelector('#deliver__store');
-// var deliverCourierBtn = document.querySelector('#deliver__courier');
 // var deliverStoreOptions = document.querySelector('.deliver__store');
 // var deliverCourierOptions = document.querySelector('.deliver__courier');
 // deliverStoreBtn.addEventListener('click', function () {
@@ -303,8 +302,6 @@ var addToBasket = function (product) {
 //   deliverStoreOptions.classList.remove('visually-hidden');
 // });
 // var deliverTab = document.querySelectorAll('.toggle-btn__input');
-// var deliverStoreOptions = document.querySelector('.deliver__store');
-// var deliverCourierOptions = document.querySelector('.deliver__courier');
 // deliverTab.addEventListener('click', function (evt) {
 //   if (evt.target.id === '#deliver__store') {
 //     deliverCourierOptions.classList.add('visually-hidden');
@@ -315,21 +312,33 @@ var addToBasket = function (product) {
 //   }
 // });
 
+parentTabElement.addEventListener('change', function (evt) {
+  if (!evt.target.classList.contains('toggle-btn__input')) {
+    return;
+  }
+
+  var currentElement = document.querySelector('.' + evt.target.id);
+  var preventElementId = evt.target.parentNode.querySelector('input[checked]').id;
+  var preventElement = document.querySelector('.' + preventElementId);
+  preventElement.classList.add('visually-hidden');
+  currentElement.classList.remove('visually-hidden');
+});
+
 
 var cardNumberArea = document.querySelector('#payment__card-number');
 var validateCardArea = function (cardNumber) {
   var cardNumberArr = [];
   var cardNumberList = cardNumber.split('');
-  for (var i = 1; i <= cardNumberList.length; i++) {
+  for (var i = 0; i < cardNumberList.length; i++) {
     if (i % 2 !== 0) {
-      var cardOddNum = parseInt(cardNumber[i], 10) * 2;
+      var cardOddNum = parseInt(cardNumberList[i], 10) * 2;
       if (cardOddNum > 9) {
         cardNumberArr.push(cardOddNum - 9);
       } else {
         cardNumberArr.push(cardOddNum);
       }
     } else {
-      var cardEvenNum = parseInt(cardNumber[i], 10);
+      var cardEvenNum = parseInt(cardNumberList[i], 10);
       cardNumberArr.push(cardEvenNum);
     }
   }
@@ -345,7 +354,7 @@ var validateCardArea = function (cardNumber) {
 };
 
 sendFormBtn.addEventListener('click', function () {
-  if (validateCardArea()) {
+  if (validateCardArea(cardNumberArea.value)) {
     return cardNumberArea.setCustomValidity('');
   } else {
     return cardNumberArea.setCustomValidity('Номер карты введен некорректно. Попробуйте еще раз');
