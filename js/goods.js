@@ -316,6 +316,7 @@ var addToBasket = function (product) {
 // });
 
 
+var cardNumberArea = document.querySelector('#payment__card-number');
 var validateCardArea = function (cardNumber) {
   var cardNumberArr = [];
   var cardNumberList = cardNumber.split('');
@@ -336,18 +337,18 @@ var validateCardArea = function (cardNumber) {
     return a + b;
   });
 
-  if (commonSum % 10 === 0) {
-    return true;
-  } else {
-    return false;
-  }
+  return commonSum % 10 === 0;
+  //   return true;
+  // } else {
+  //   return false;
+  // }
 };
 
 sendFormBtn.addEventListener('click', function () {
   if (validateCardArea()) {
-    return sendFormBtn.setCustomValidity('');
+    return cardNumberArea.setCustomValidity('');
   } else {
-    return sendFormBtn.setCustomValidity('Номер карты введен некорректо. Попробуйте еще раз');
+    return cardNumberArea.setCustomValidity('Номер карты введен некорректно. Попробуйте еще раз');
   }
 });
 
